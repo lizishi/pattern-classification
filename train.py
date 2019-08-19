@@ -26,12 +26,12 @@ writer = SummaryWriter()
 
 
 def run(config):
-    train_dataset = ImageFolder(config.train_path, transform=config.transform)
+    train_dataset = ImageFolder(config.train_path, transform=config.train_transform)
     train_dataloader = torch.utils.data.DataLoader(train_dataset,
                                                    batch_size=config.batch_size,
                                                    shuffle=config.shuffle)
 
-    test_dataset = ImageFolder(config.test_path, transform=config.transform)
+    test_dataset = ImageFolder(config.test_path, transform=config.test_transform)
     test_dataloader = torch.utils.data.DataLoader(test_dataset,
                                                   batch_size=config.batch_size,
                                                   shuffle=config.shuffle)
