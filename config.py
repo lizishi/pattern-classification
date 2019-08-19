@@ -9,7 +9,7 @@ class Config:
 
         self.lr = 1e-3
 
-        self.epoch_num = 200
+        self.epoch_num = 100
         self.batch_size = 64
         self.shuffle = True
 
@@ -24,6 +24,6 @@ class Config:
         self.save_checkpoint = True
         self.save_every = 10
 
-        self.train_path = r'F:\data2train\train'
-        self.test_path = r'F:\data2train\test'
-        self.save_path = r'F:\pattern-classification-checkpoint_1'
+        self.train_path = '/media/lizishi/本地磁盘/data2train/train'
+        self.test_path = '/media/lizishi/本地磁盘/data2train/test'
+        self.save_path = '/media/lizishi/本地磁盘/pattern-classification-checkpoint-resnet'
