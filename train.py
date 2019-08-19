@@ -5,7 +5,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.models
-from tensorboardX import SummaryWriter
 from tqdm import tqdm
 
 from config import Config
@@ -14,15 +13,12 @@ from dataset import ImageFolder
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 device = 'cuda:0'
 
-model = torchvision.models.inception_v3(pretrained=True)
+model = torchvision.models.resnet101(pretrained=True)
 for p in model.parameters():
     p.requires_grad = False
 model.fc = nn.Linear(in_features=2048, out_features=2)
-model.aux_logits = False
 model = model.to(device)
 sigmoid = nn.Sigmoid()
-
-writer = SummaryWriter()
 
 
 def run(config):
@@ -40,7 +36,7 @@ def run(config):
     loss_function = nn.BCELoss()
 
     for epoch in range(config.epoch_num):
-        if epoch % 50 == 0:
+        if epoch and epoch % 20 == 0:
             config.lr /= 10
             for param_group in optimizer.param_groups:
                 param_group['lr'] = config.lr
@@ -61,7 +57,6 @@ def run(config):
             sum_loss += loss.sum().item()
 
         print('epoch: %d, loss: %f' % (epoch + 1, sum_loss))
-        writer.add_scalar('loss/BCEloss', sum_loss, epoch)
 
         if (epoch + 1) % config.test_every == 0:
             model.eval()
@@ -86,12 +81,11 @@ def run(config):
             acc2 /= len(test_dataset)
             print('first category acc: %f, second category acc: %f' %
                   (acc1, acc2))
-            writer.add_scalar('acc/val', acc1 + acc2 / 2, epoch)
 
         if config.save_checkpoint and (epoch + 1) % config.save_every == 0:
             if not os.path.exists(config.save_path):
                 os.makedirs(config.save_path)
-            torch.save(model, os.path.join(config.save_path, 'model_%d.pth' % epoch))
+            torch.save(model, os.path.join(config.save_path, 'resnet101_%d.pth' % epoch))
 
 
 if __name__ == '__main__':
